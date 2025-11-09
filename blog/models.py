@@ -1,5 +1,5 @@
 """
-Blog-Domänenmodelle.
+Blog domain models.
 
 Design:
 - Posts go through different states (Draft/Published); ‘published’ manager encapsulates filter logic.
@@ -24,9 +24,9 @@ class PublishedManager(models.Manager):
 # Post Model, define the fields of the model.That shows a Line in the Database.
 class Post(models.Model):
     """
-    Ein Blogbeitrag.
+    A blog post.
 
-    Invarianten:
+    invariants:
     - ‘status’ is one of Status (2-digit code for slim index).
     - Default sorting by ‘-publish’ (newest first).
     - Slug uniqueness: per day via ‘unique_for_date’ (see field definition).

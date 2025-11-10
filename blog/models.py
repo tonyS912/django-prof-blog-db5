@@ -36,7 +36,7 @@ class Post(models.Model):
         PUBLISHED = 'PB', 'Published'
 
     # Fields
-    # Title is a Charfield with a max length of 250 characters.
+    # Title is a Char-field with a max length of 250 characters.
     title = models.CharField(max_length=250)
     # Unique slug per ‘publish’ date -> stable, date-based permalinks.
     # (show unique_for_date / Constraint below)
@@ -49,7 +49,7 @@ class Post(models.Model):
     publish = models.DateTimeField(default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    # Status is a CharField with a max length of 2 characters. It can be only the Declarated ones from the Status class.
+    # Status is a CharField with a max length of 2 characters. It can be only the Decelerated ones from the Status class.
     status = models.CharField(max_length=2, choices=Status.choices, default=Status.DRAFT)
 
     # Managers

@@ -9,6 +9,7 @@ Design:
 
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 
@@ -16,9 +17,7 @@ from django.utils import timezone
 # Attention: Status codes change => Adjust tests + manager.
 class PublishedManager(models.Manager):
     def get_queryset(self):
-        return (
-            super().get_queryset().filter(status=Post.Status.PUBLISHED)
-        )
+        return super().get_queryset().filter(status=Post.Status.PUBLISHED)
 
 
 # Post Model, define the fields of the model.That shows a Line in the Database.
@@ -31,9 +30,10 @@ class Post(models.Model):
     - Default sorting by ‘-publish’ (newest first).
     - Slug uniqueness: per day via ‘unique_for_date’ (see field definition).
     """
+
     class Status(models.TextChoices):
-        DRAFT = 'DF', 'Draft'
-        PUBLISHED = 'PB', 'Published'
+        DRAFT = "DF", "Draft"
+        PUBLISHED = "PB", "Published"
 
     # Fields
     # Title is a Char-field with a max length of 250 characters.
@@ -42,7 +42,12 @@ class Post(models.Model):
     # (show unique_for_date / Constraint below)
     slug = models.SlugField(max_length=250)
     # No default user: Author must be set explicitly (transparency in Admin/API).
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts', default=1)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="blog_posts",
+        default=1,
+    )
     # Body is a TextField.
     body = models.TextField()
     # Publish and created_at and updated is a DateTimeField.
@@ -50,32 +55,41 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     # Status is a CharField with a max length of 2 characters. It can be only the Decelerated ones from the Status class.
-    status = models.CharField(max_length=2, choices=Status.choices, default=Status.DRAFT)
+    status = models.CharField(
+        max_length=2, choices=Status.choices, default=Status.DRAFT
+    )
 
     # Managers
-    objects = models.Manager() # The default manager.
-    published = PublishedManager() # Our customer manager
+    objects = models.Manager()  # The default manager.
+    published = PublishedManager()  # Our customer manager
 
     # Meta class
     class Meta:
-        ordering = ['-publish']
+        ordering = ["-publish"]
         indexes = [
-            models.Index(fields=['-publish']),
+            models.Index(fields=["-publish"]),
         ]
 
     # Methods
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse(
+            "blog:post_detail",
+            args=[
+                self.id,
+            ],
+        )
+
 
 # No composite PKs in Django core. Uniqueness (user, post) via UniqueConstraint.
 # Advantage: simple foreign keys, compatible with Admin and migrations.
 class FavoritePost(models.Model):
     # Composite Primary Key.
-    pk = models.CompositePrimaryKey('user', 'post')
+    pk = models.CompositePrimaryKey("user", "post")
     # Foreign Keys.
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    post = models.ForeignKey('blog.Post',
-                             on_delete=models.CASCADE)
+    post = models.ForeignKey("blog.Post", on_delete=models.CASCADE)
     # Date and Time.
     created_at = models.DateTimeField(auto_now_add=True)

@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     # Local
-    "blog",
+    "blog.apps.BlogConfig",
 ]
 
 # django-crispy-forms

@@ -18,7 +18,7 @@ def post_list(request):
         # If page_number is not an Integer get the first page
         posts = paginator.page(1)
 
-    # Render Post List Content
+    # Render Post List
     return render(request, "blog/post/list.html", {"posts": posts})
 
 

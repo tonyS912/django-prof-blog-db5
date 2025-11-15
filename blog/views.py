@@ -1,9 +1,25 @@
+from django.views.generic import ListView
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import render, get_object_or_404
 from .models import Post
 
 
 # Create your views here.
+class PostListView(ListView):
+    """_summary_
+
+    Args:
+        ListView (_type_): _description_
+    """
+
+    queryset = (
+        Post.published.all()
+    )  # Custom QuerySet like model = Post, django would built the generic Post.obects.all() QuerSet
+    context_object_name = "post"  # if we don't specify special name with context_object_name for the query results, default will be object_list
+    paginate_by = 3  # how much objects will be returned per Page
+    template_name = "blog/post/list.html"  # using custom template to render, default django would search for blog/post_list.html
+
+
 def post_list(request):
     post_list = Post.published.all()
     # Pagination with 3 post per page

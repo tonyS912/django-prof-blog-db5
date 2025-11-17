@@ -15,7 +15,7 @@ class PostListView(ListView):
     template_name = "blog/post/list.html"  # using custom template to render, default django would search for blog/post_list.html
 
 
-""" def post_list(request):
+def post_list(request):
     post_list = Post.published.all()
     # Pagination with 3 post per page
     paginator = Paginator(post_list, 3)
@@ -30,7 +30,7 @@ class PostListView(ListView):
         posts = paginator.page(1)
 
     # Render Post List
-    return render(request, "blog/post/list.html", {"posts": posts}) """
+    return render(request, "blog/post/list.html", {"posts": posts})
 
 
 def post_detail(request, year, month, day, post):

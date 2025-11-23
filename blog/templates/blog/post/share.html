@@ -11,6 +11,8 @@ Share a post
 {% else %}
 <h1>Share "{{ post.title }}" by e-mail</h1>
 <form method="post">
+    <!-- form.as_p define the message body as p-tag
+    other options are as_ul and as_table -->
     {{ form.as_p }}
     {% csrf_token %}
     <input type="submit" value="Send e-mail">

@@ -7,3 +7,4 @@ staticfiles
 */__init__.py
 */__pycache__/
 django-blog-dj5.code-workspace
+.vscode/settings.json

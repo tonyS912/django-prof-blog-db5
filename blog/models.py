@@ -98,6 +98,7 @@ class FavoritePost(models.Model):
 # @ post: The Post to which the comment belongs.
 class Comment(models.Model):
     # Foreign Key. The Post to which the comment belongs.
+    # if we don't use related_name, Django will use comment_set as default.
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
     # Fields
     name = models.CharField(max_length=80)

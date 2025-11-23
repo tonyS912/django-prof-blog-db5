@@ -91,3 +91,31 @@ class FavoritePost(models.Model):
     post = models.ForeignKey("blog.Post", on_delete=models.CASCADE)
     # Date and Time.
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+# Comment Model for user comments on posts.
+# Comments are linked to Posts via ForeignKey.
+# @ post: The Post to which the comment belongs.
+class Comment(models.Model):
+    # Foreign Key. The Post to which the comment belongs.
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    # Fields
+    name = models.CharField(max_length=80)
+    email = models.EmailField()
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+
+    # Meta class
+    # Default ordering by ‘created’ (oldest first).
+    class Meta:
+        ordering = ["created"]
+        indexes = [
+            models.Index(fields=["created"]),
+        ]
+
+    # Methods
+    # String representation of the Comment model.
+    def __str__(self):
+        return f"Comment by {self.name} on {self.post}"

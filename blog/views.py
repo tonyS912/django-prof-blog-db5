@@ -90,6 +90,7 @@ def post_share(request, post_id):
 def post_comment(request, post_id):
     # Retrieve post by id
     post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
+    # Initialize comment as None
     comment = None
     # A comment was posted
     form = CommentForm(data=request.POST)

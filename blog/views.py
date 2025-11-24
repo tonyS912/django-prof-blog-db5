@@ -85,8 +85,10 @@ def post_share(request, post_id):
     )
 
 
+# Handle post comments
 @require_POST
 def post_comment(request, post_id):
+    # Retrieve post by id
     post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
     comment = None
     # A comment was posted
@@ -98,6 +100,8 @@ def post_comment(request, post_id):
         comment.post = post
         # Save the comment to the database
         comment.save()
+
+    # Render the comment form template
     return render(
         request,
         "blog/post/comment.html",

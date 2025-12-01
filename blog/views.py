@@ -5,6 +5,7 @@ from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404
 from .models import Post
 from .forms import EmailPostForm, CommentForm
+from taggit.models import Tag  # Django-taggit
 
 
 # Create your views here.
@@ -17,8 +18,13 @@ class PostListView(ListView):
     template_name = "blog/post/list.html"  # using custom template to render, default django would search for blog/post_list.html
 
 
-def post_list(request):
+def post_list(request, tag_slug=None):
     post_list = Post.published.all()
+    # Django-taggit: filter by tag if tag_slug is provided
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        post_list = post_list.filter(tags__in=[tag])
     # Pagination with 3 post per page
     paginator = Paginator(post_list, 3)
     page_number = request.GET.get("page", 1)
@@ -32,7 +38,7 @@ def post_list(request):
         posts = paginator.page(1)
 
     # Render Post List
-    return render(request, "blog/post/list.html", {"posts": posts})
+    return render(request, "blog/post/list.html", {"posts": posts, "tag": tag})
 
 
 def post_detail(request, year, month, day, post):

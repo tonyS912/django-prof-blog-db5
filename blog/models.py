@@ -11,6 +11,7 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from taggit.managers import TaggableManager
 
 
 # Only delivers published posts (hard link to Post.Status.PUBLISHED).
@@ -30,6 +31,8 @@ class Post(models.Model):
     - Default sorting by ‘-publish’ (newest first).
     - Slug uniqueness: per day via ‘unique_for_date’ (see field definition).
     """
+
+    tags = TaggableManager()  # Taggable manager for tags.
 
     class Status(models.TextChoices):
         DRAFT = "DF", "Draft"
